@@ -76,23 +76,22 @@ void distribute(char *deck[104], char *playerHand[4][8], int round){
 
 
 int main(){
-    int playerPoints[] = {0, 0, 0, 0};
-    char *deck[104];
-    char *playerHand[4][8];
+    int playerPoints[] = {0, 0, 0, 0}; //players points
+    char *deck[104]; //deck of cards
+    char *playerHand[4][8]; //cards for each player
+    char *placedCards[4][8]; //cards used by the players
     
-    
-    
-    iniDeck(deck);
-    shuffle(deck);
-    for(int i = 0; i < 104; i++){
-        printf("%d %s, ", i + 1, deck[i]);
-    }
-    printf("\n\n");
+    iniDeck(deck); //deck initialize
+    shuffle(deck);//shuffle deck
+
+    printf("Fiesta GO!\n\n");
 
     for(int i = 0; i < 3; i++){
+        //three rounds 4 players
         printf("Round %d\n", i + 1);
 
-        distribute(deck, playerHand, i);
+        distribute(deck, playerHand, i);//distribute 8 cards for each player
+        
         for(int j = 0; j < 4; j++){
             printf("player%d: ", j + 1);
             for(int k = 0; k < 8; k++){
