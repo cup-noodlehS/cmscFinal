@@ -92,16 +92,24 @@ int main(){
 
         distribute(deck, playerHand, i);//distribute 8 cards for each player
         
+        //displaying the cards
         for(int j = 0; j < 4; j++){
             printf("player%d: ", j + 1);
             for(int k = 0; k < 8; k++){
-                printf("%d %s, ", k + 1, playerHand[j][k]);
+                printf("<%d> %s | ", k + 1, playerHand[j][k]);
             }
             printf("\n");
         }
+
+        //choosing cards
+        for(int j = 0; j < 4; j++){
+            
+        }
         printf("\n");
+
+
+
     }
 
-    printf("hi");
     return 0;
 }
