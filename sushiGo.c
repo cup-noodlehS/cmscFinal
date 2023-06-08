@@ -102,5 +102,7 @@ int main(){
         }
         printf("\n");
     }
+
+    printf("hi");
     return 0;
 }
