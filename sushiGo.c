@@ -1,19 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-
-//value of cards
-struct cardValue{
-    int chickenLumpia = 2;
-    int tawgiLumpia = 1;
-    int shanghaiLumpia = 3;
-    int suka = 3; //multiply to lumpias
-    int empanada[] = {1, 3, 6, 10, 15};
-    int lb = 10;
-    int ccb = 5;
-    int rice[] = {6, 3};
-    int halohalo = {6, -6};
-};
+#include <string.h>
 
 //initalizing deck
 void iniDeck(char *deck[104]){
@@ -88,6 +76,39 @@ void distribute(char *deck[104], char *playerHand[4][8], int round){
     }
 }
 
+//calculate score
+int calcScore(char *placedCards[4][8], int payerPoints[4]){
+    for(int i = 0; i < 4; i++){
+        int score = 0;
+        for(int j = 0; j < 8; j++){
+            char* card = placedCards[i][j];
+            if(strcmp(card, "tawgiLumpia")==0){
+                score += 1;
+            }else if(strcmp(card, "chickenLumpia")==0){
+                score += 2;
+            }else if(strcmp(card, "shanghaiLumpia")==0){
+                score += 3;
+            }else if(strcmp(card, "suka")==0){
+                for(int k = j - 1; k >= 0; k--){
+                    if(strcmp(placedCards[i][k], "chickenLumpia")==0){
+                        score = (score - 2) + (2 * 3);
+                        break;
+                    }else if(strcmp(placedCards[i][k], "shanghaiLumpia")==0){
+                        score = (score - 3) + (3 * 3);
+                        break;
+                    }else if(strcmp(placedCards[i][k], "tawgiLumpia")==0){
+                        score = (score - 1) + (3);
+                        break;
+                    }else{
+                        continue;
+                    }
+                }
+            }
+            //to be continued
+        }
+    }
+}
+
 
 
 int main(){
@@ -102,7 +123,7 @@ int main(){
     printf("Fiesta GO!\n\n");
 
     for(int i = 0; i < 3; i++){
-        //three rounds 4 players
+        //three rounds, 4 players
         printf(">>>Round %d<<<\n\n", i + 1);
 
         distribute(deck, playerHand, i);//distribute 8 cards for each player
