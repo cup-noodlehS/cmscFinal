@@ -66,18 +66,18 @@ void shuffle(char *array[104]){
 }
 
 //distribute cards to 4 playersa
-void distribute(char *deck[104], char *playerHand[4][8], int round){
+void distribute(char *deck[104], char *playerCards[4][8], int round){
     int deckindex = ((round + 1) * (32)) - 32;
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 8; j++){
-            playerHand[i][j] = deck[deckindex];
+            playerCards[i][j] = deck[deckindex];
             deckindex++; 
         }
     }
 }
 
 //calculate score
-int calcScore(char *placedCards[4][8], int payerPoints[4]){
+int calcScore(char *placedCards[4][8], int points[4]){
     for(int i = 0; i < 4; i++){
         int score = 0;
         for(int j = 0; j < 8; j++){
@@ -103,18 +103,34 @@ int calcScore(char *placedCards[4][8], int payerPoints[4]){
                         continue;
                     }
                 }
+            }else{
+                score++;
+                //to be continued
             }
-            //to be continued
+            
+        }
+        points[i] = score;
+    }
+}
+
+int highest(int arr[4]){
+    int max = arr[0];
+    int index = 0;
+    for(int i = 1; i < 4; i++){
+        if(arr[i] > max){
+            max = arr[i];
+            index = i;
         }
     }
+    return index;
 }
 
 
 
 int main(){
-    int playerPoints[] = {0, 0, 0, 0}; //players points
+    int points[] = {0, 0, 0, 0}; //players points
     char *deck[104]; //deck of cards
-    char *playerHand[4][8]; //cards for each player
+    char *playerCards[4][8]; //cards for each player
     char *placedCards[4][8]; //cards used by the players
     
     iniDeck(deck); //deck initialize
@@ -126,17 +142,33 @@ int main(){
         //three rounds, 4 players
         printf(">>>Round %d<<<\n\n", i + 1);
 
-        distribute(deck, playerHand, i);//distribute 8 cards for each player
+        distribute(deck, playerCards, i);//distribute 8 cards for each player
 
         //turns
+        int index[] = {0, 1, 2, 3}; //index for switching cards
         for(int t = 0; t < 8; t++){
-            int index[] = {0, 1, 2, 3, 4}; //index for switching cards
-
+            //if last card then place the break
+            if(t == 7){
+                for(int j = 0; j < 4; j++){
+                    placedCards[j][t] = playerCards[index[j]][0];
+                }
+                //display picked cards
+                for(int j = 0; j < 4; j++){
+                    printf("Player %d:", j+1);
+                    for(int k = 0; k <= t; k++){
+                        printf("%s | ", placedCards[j][k]);
+                    }
+                    printf("\n");
+                }
+                printf("\n");
+                break;   
+            }
+           
             //displaying the cards
             for(int j = 0; j < 4; j++){
                 printf("player%d: ", j + 1);
                 for(int k = 0; k < 8 - t; k++){
-                    printf("<%d> %s | ", k, playerHand[index[j]][k]);
+                    printf("<%d> %s | ", k, playerCards[index[j]][k]);
                 }
                 printf("\n");
             }
@@ -146,19 +178,29 @@ int main(){
             for(int j = 0; j < 4; j++){
                 int chosenIndex;
                 printf("Player %d's turn: ", j + 1);
+                //bounds check
                 scanf("%d", &chosenIndex);
-                //choosing card
-                placedCards[j][t] = playerHand[index[j]][chosenIndex];
+                while(!((chosenIndex >= 0) && (chosenIndex <= 7 - t))){
+                    printf("invalid input:<\n");
+                    printf("Player %d's turn: ", j + 1);
+                    scanf("%d", &chosenIndex);
+                }
+              
+                //placing card
+                placedCards[j][t] = playerCards[index[j]][chosenIndex];
 
                 //removing
                 for(int k = chosenIndex; k < 8 - t; k++){
-                    playerHand[index[j]][k] = playerHand[index[j]][k+1];
+                    playerCards[index[j]][k] = playerCards[index[j]][k+1];
                 }
             }
             printf("\n");
 
             //displaying picked cards
             printf(">>>Picked Cards<<<\n");
+            if(t == 6){
+                continue;
+            }
             for(int j = 0; j < 4; j++){
                 printf("Player %d:", j+1);
                 for(int k = 0; k <= t; k++){
@@ -169,12 +211,18 @@ int main(){
 
             //switching cards
             for(int j=0; j < 4; j++){
-                index[j] = (index[j] + 1) % 5;
+                index[j] = (index[j] + 1) % 4;
             }
             printf("\n>>>Switch!<<<\n\n");
         }
-
     }
+
+    printf(">>Scores<<\n");
+    calcScore(placedCards, points);
+    for(int i = 0; i < 4; i++){
+        printf("player %d: %d\n", i+1, points[i]);
+    }
+    printf("The Winner is Player %d with %d points!!!", highest(points) + 1, points[highest(points)]);
 
     return 0;
 }
