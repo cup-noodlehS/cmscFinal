@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 
+//value of cards
 struct cardValue{
     int chickenLumpia = 2;
     int tawgiLumpia = 1;
@@ -14,7 +15,7 @@ struct cardValue{
     int halohalo = {6, -6};
 };
 
-
+//initalizing deck
 void iniDeck(char *deck[104]){
     int i = 0;
     while(i < 14){
@@ -64,6 +65,7 @@ void iniDeck(char *deck[104]){
 
 }
 
+//shuffling deck
 void shuffle(char *array[104]){
     int n = 104;
     srand(time(NULL));
@@ -75,6 +77,7 @@ void shuffle(char *array[104]){
     }
 }
 
+//distribute cards to 4 playersa
 void distribute(char *deck[104], char *playerHand[4][8], int round){
     int deckindex = ((round + 1) * (32)) - 32;
     for(int i = 0; i < 4; i++){
