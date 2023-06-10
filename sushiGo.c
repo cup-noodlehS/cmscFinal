@@ -2,6 +2,18 @@
 #include <time.h>
 #include <stdlib.h>
 
+struct cardValue{
+    int chickenLumpia = 2;
+    int tawgiLumpia = 1;
+    int shanghaiLumpia = 3;
+    int suka = 3; //multiply to lumpias
+    int empanada[] = {1, 3, 6, 10, 15};
+    int lb = 10;
+    int ccb = 5;
+    int rice[] = {6, 3};
+    int halohalo = {6, -6};
+};
+
 
 void iniDeck(char *deck[104]){
     int i = 0;
@@ -88,26 +100,55 @@ int main(){
 
     for(int i = 0; i < 3; i++){
         //three rounds 4 players
-        printf("Round %d\n", i + 1);
+        printf(">>>Round %d<<<\n\n", i + 1);
 
         distribute(deck, playerHand, i);//distribute 8 cards for each player
-        
-        //displaying the cards
-        for(int j = 0; j < 4; j++){
-            printf("player%d: ", j + 1);
-            for(int k = 0; k < 8; k++){
-                printf("<%d> %s | ", k + 1, playerHand[j][k]);
+
+        //turns
+        for(int t = 0; t < 8; t++){
+            int index[] = {0, 1, 2, 3, 4}; //index for switching cards
+
+            //displaying the cards
+            for(int j = 0; j < 4; j++){
+                printf("player%d: ", j + 1);
+                for(int k = 0; k < 8 - t; k++){
+                    printf("<%d> %s | ", k, playerHand[index[j]][k]);
+                }
+                printf("\n");
             }
             printf("\n");
+
+            //placing then removing cards from deck
+            for(int j = 0; j < 4; j++){
+                int chosenIndex;
+                printf("Player %d's turn: ", j + 1);
+                scanf("%d", &chosenIndex);
+                //choosing card
+                placedCards[j][t] = playerHand[index[j]][chosenIndex];
+
+                //removing
+                for(int k = chosenIndex; k < 8 - t; k++){
+                    playerHand[index[j]][k] = playerHand[index[j]][k+1];
+                }
+            }
+            printf("\n");
+
+            //displaying picked cards
+            printf(">>>Picked Cards<<<\n");
+            for(int j = 0; j < 4; j++){
+                printf("Player %d:", j+1);
+                for(int k = 0; k <= t; k++){
+                    printf("%s | ", placedCards[j][k]);
+                }
+                printf("\n");
+            }
+
+            //switching cards
+            for(int j=0; j < 4; j++){
+                index[j] = (index[j] + 1) % 5;
+            }
+            printf("\n>>>Switch!<<<\n\n");
         }
-
-        //choosing cards
-        for(int j = 0; j < 4; j++){
-            
-        }
-        printf("\n");
-
-
 
     }
 
